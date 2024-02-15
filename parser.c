@@ -5,8 +5,11 @@
 #include <sys/types.h>		/* size_t				*/
 #include "parser.h"
 
-
-#define PRINT_STDERR_MSG_FLAG	1
+/*
+ * This macro is just a simple code for debugging purposes. It is off by default (#define PRINT_STDERR_MSG_FLAG 0). 
+ * To enable error messages in the file, just set the flag to 1.
+ */
+#define PRINT_STDERR_MSG_FLAG	0
 #define PRINT_STDERR_MSG(var_name) 								\
 		do {										\
 			if (PRINT_STDERR_MSG_FLAG)						\
@@ -14,30 +17,14 @@
 				"%s phoneparser.c header file line: %d\n", var_name, __LINE__); \
 		} while(0) 									\
 
-// ham telefon numarasının işlenip ayrıştırılmadan önceki maksimum uzunluğu. 
-#define MAX_RAW_PHONE_NUMBER	25
+
 /*
-struct phone_data {
-	char 		*name;
-	char		*country_code;
-	char		*area_code;
-	char		*local_code;
-	
-	struct		phone_data *next;
-	struct 		phone_data *prev;
-};
+ * The add_number function (struct phone_list->add) specifies the maximum length that the raw_phone_number 
+ * parameter can be. Phone numbers can be surrounded by different characters when in a text, so you can change 
+ * the length of the raw version of your variable before the digits are extracted. 
+ */
+#define MAX_RAW_PHONE_NUMBER	25
 
-struct phone_list {
-	struct phone_data *p_data;
-	
-	int		(*add)(struct phone_list *p_list, const char *name, const char *number_array);
-	void		(*print)(struct phone_list *p_list);
-	int		(*read_json)(struct phone_list *p_list, FILE *json_file);
-	int		(*write_json)(struct phone_list *p_list, FILE *json_file);
-	void		(*free)(struct phone_list *p_list);
-};
-
-*/
 
 int init_phone_list(struct phone_list **p_list);
 int phone_list_calloc(struct phone_list *p_list);
