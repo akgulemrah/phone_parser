@@ -1,3 +1,16 @@
+/*
+ * phone_parser/parser.c
+ * author: Emrah Akgül
+ * 
+ * The purpose of the header file is to parse the digits in a char array 
+ * (country code, area code, local code), whether surrounded by different characters or not, 
+ * and to store these parsed digits as a char array with a linked list in variables with the 
+ * corresponding names. I realise that the file is very incomplete and needs to be completed, 
+ * if you want to help, feel free!
+ */ 
+
+
+
 #include <stdio.h>		/* printf 				*/
 #include <stdlib.h>		/* malloc, calloc, system calls 	*/
 #include <string.h>		/* strlen, strcat vs 			*/
@@ -24,15 +37,6 @@
  * the length of the raw version of your variable before the digits are extracted. 
  */
 #define MAX_RAW_PHONE_NUMBER	25
-
-
-int init_phone_list(struct phone_list **p_list);
-int phone_list_calloc(struct phone_list *p_list);
-int extract_phone_number(struct phone_data *p_data, const char *extract_phone_number);
-int add_number(struct phone_list **p_list, const char *name, const char *raw_number_array);
-int phone_data_free(struct phone_data **p_data);
-int free_phone_list(struct phone_list **p_list);
-void print_phone_list(struct phone_list **p_list);
 
 
 
