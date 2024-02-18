@@ -43,8 +43,8 @@
 int init_phone_list(struct phone_list **p_list)
 {
 	/*
-	phone_list nesnesini başlatmak için. liste içindeki 
-	fonksiyon işaretçilerine ilk değerler burada atanır. 
+	to initialize the phone_list object. inside the list 
+	function pointers are assigned initial values here.
 	*/
 
 	if (country_code_size < 1 && area_code_size < 1 && local_code_size < 1) {
@@ -70,7 +70,7 @@ int init_phone_list(struct phone_list **p_list)
 
 struct phone_data *phone_data_calloc(void)
 {
-	//phone_list içindeki phone_data structı için alan tahsis eder.
+	// Allocates space for the phone_data struct in phone_list.
 	
 	struct phone_data *p_data = NULL;
 	if ((p_data = (struct phone_data *)calloc(1, sizeof(struct phone_data))) == NULL) {
@@ -103,9 +103,10 @@ struct phone_data *phone_data_calloc(void)
 int extract_phone_number(struct phone_data *p_data, const char *raw_number_array)
 {
 	/*
-	add_number fonksiyonuna parametre geçirilen ham metni parçalayıp 
- 	phone_data içindeki ilgili alanlara vermek için hazırlayan ve geriye bu değerlerin toplamı
-	uzunluğunda bir char array işaretçisi gönderen fonksiyon.
+	We shred the raw text given as a parameter to the add_number function. 
+ 	If there is no problem with the size of this new string to give to the 
+  	relevant fields in phone_data, we pass the values to the relevant fields
+   	and return a value of 0. If there is a problem, this value is returned negative. 
 	*/
 	int i = 0, j = 0;
     	char *phone_arr = NULL;
@@ -147,7 +148,8 @@ int extract_phone_number(struct phone_data *p_data, const char *raw_number_array
 int add_number(struct phone_list **p_list, const char *name, const char *raw_number_array)
 {
 	/*
-	 name ve raw_number_array parametrelerini işleyip bağlı lisede bir node oluşturup ona ekleyen bir fonksiyon.
+	 A function that processes the name and raw_number_array parameters and 
+  	 creates and adds a node in the linked list.
 	*/
 	
 	struct phone_data *next_node;
