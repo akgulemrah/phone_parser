@@ -1,6 +1,5 @@
 /*
- * phone_parser/parser.c
- * author: Emrah Akgül
+ * parser.c
  * 
  * The purpose of the header file is to parse the digits in a char array 
  * (country code, area code, local code), whether surrounded by different characters or not, 
@@ -8,8 +7,6 @@
  * corresponding names. I realise that the file is very incomplete and needs to be completed, 
  * if you want to help, feel free!
  */ 
-
-
 
 #include <stdio.h>		/* printf 				*/
 #include <stdlib.h>		/* malloc, calloc, system calls 	*/
@@ -22,31 +19,23 @@
  * This macro is just a simple code for debugging purposes. It is off by default (#define PRINT_STDERR_MSG_FLAG 0). 
  * To enable error messages in the file, just set the flag to 1.
  */
+#define MAX_RAW_PHONE_NUMBER	25
+
 #define PRINT_STDERR_MSG_FLAG	0
 #define PRINT_STDERR_MSG(var_name) 								\
 		do {										\
-			if (PRINT_STDERR_MSG_FLAG)						\
+			if (PRINT_STDERR_MSG_FLAG) {						\
 				fprintf(stderr, "Error, variable name: "			\
 				"%s phoneparser.c header file line: %d\n", var_name, __LINE__); \
+			}									\
 		} while(0) 									\
 
-
 /*
- * The add_number function (struct phone_list->add) specifies the maximum length that the raw_phone_number 
- * parameter can be. Phone numbers can be surrounded by different characters when in a text, so you can change 
- * the length of the raw version of your variable before the digits are extracted. 
+ * to initialize the phone_list object. inside the list 
+ * function pointers are assigned initial values here.
  */
-#define MAX_RAW_PHONE_NUMBER	25
-
-
-
 int init_phone_list(struct phone_list **p_list)
 {
-	/*
-	to initialize the phone_list object. inside the list 
-	function pointers are assigned initial values here.
-	*/
-
 	if (country_code_size < 1 && area_code_size < 1 && local_code_size < 1) {
 		PRINT_STDERR_MSG("country_code_size || area_code_size || local_code_size");
 		return -2;
@@ -67,47 +56,47 @@ int init_phone_list(struct phone_list **p_list)
 }
 
 
-
+/*
+ * Allocates space for the phone_data struct in phone_list.
+ */
 struct phone_data *phone_data_calloc(void)
 {
-	// Allocates space for the phone_data struct in phone_list.
+	struct phone_data *tmp = NULL;
 	
-	struct phone_data *p_data = NULL;
-	if ((p_data = (struct phone_data *)calloc(1, sizeof(struct phone_data))) == NULL) {
+	if ((tmp = (struct phone_data *)calloc(1, sizeof(struct phone_data))) == NULL) {
 		PRINT_STDERR_MSG("phone_data_calloc içinde p_data için bellek tahsisi başarısız");
 		return NULL;
 	}
 	
-	if ((p_data->country_code = (char *)calloc(country_code_size, sizeof(char))) == NULL) {
+	if ((tmp->country_code = (char *)calloc(country_code_size, sizeof(char))) == NULL) {
 		PRINT_STDERR_MSG("phone_data_calloc içinde country_code için bellek tahsisi başarısız");
-		phone_data_free(&p_data);
+		phone_data_free(&tmp);
 		return NULL;
 	}
 	
-	if ((p_data->area_code = (char *)calloc(area_code_size, sizeof(char))) == NULL) {
+	if ((tmp->area_code = (char *)calloc(area_code_size, sizeof(char))) == NULL) {
 		PRINT_STDERR_MSG("phone_data_calloc içinde area_code için bellek tahsisi başarısız");
-		phone_data_free(&p_data);
+		phone_data_free(&tmp);
 		return NULL;
 	}
 	
-	if ((p_data->local_code = (char *)calloc(local_code_size, sizeof(char))) == NULL) {
+	if ((tmp->local_code = (char *)calloc(local_code_size, sizeof(char))) == NULL) {
 		PRINT_STDERR_MSG("phone_data_calloc içinde local_code için bellek tahsisi başarısız");
-		phone_data_free(&p_data);
+		phone_data_free(&tmp);
 		return NULL;
 	}
 	
-	return p_data;
+	return tmp;
 }
 
-
+/*
+ * We shred the raw text given as a parameter to the add_number function. 
+ * If there is no problem with the size of this new string to give to the 
+ * relevant fields in phone_data, we pass the values to the relevant fields
+ * and return a value of 0. If there is a problem, this value is returned negative. 
+ */
 int extract_phone_number(struct phone_data *p_data, const char *raw_number_array)
 {
-	/*
-	We shred the raw text given as a parameter to the add_number function. 
- 	If there is no problem with the size of this new string to give to the 
-  	relevant fields in phone_data, we pass the values to the relevant fields
-   	and return a value of 0. If there is a problem, this value is returned negative. 
-	*/
 	int i = 0, j = 0;
     	char *phone_arr = NULL;
 	unsigned int phone_buf_size = 0;
@@ -144,22 +133,19 @@ int extract_phone_number(struct phone_data *p_data, const char *raw_number_array
 }
 
 
-
+/*
+ * A function that processes the name and raw_number_array parameters and 
+ * creates and adds a node in the linked list.
+ */
 int add_number(struct phone_list **p_list, const char *name, const char *raw_number_array)
 {
-	/*
-	 A function that processes the name and raw_number_array parameters and 
-  	 creates and adds a node in the linked list.
-	*/
-	
-	struct phone_data *next_node;
-	struct phone_data *iter;
+	struct phone_data *next_node = NULL;
+	struct phone_data *iter = NULL;
 	
 	if (name == NULL || strlen(name) < 2) {
 		PRINT_STDERR_MSG("add_number fpnksiyonunun parametresi olan name, geçerli bir parametre değil.");
 		return -2;
 	}
-	
 	
 	if ((*p_list)->p_data == NULL) {
 		(*p_list)->p_data = phone_data_calloc();
@@ -224,7 +210,6 @@ void print_phone_list(struct phone_list **p_list)
 						iter->area_code,
 						iter->local_code);
 		iter = iter->next;
-
 	}
 }
 
