@@ -9,8 +9,8 @@ int main(void)
 {
 	struct phone_list *list;
 	int ret = init_phone_list(&list);
-	if (list == NULL) {
-		printf("işlem başarısız hacı\n");
+	if (ret != 0) {
+		printf("işlem başarısız\n");
 		return 1;
 	}
 	list->add(&list, "Emrah", "+905dfv45g3372663");
