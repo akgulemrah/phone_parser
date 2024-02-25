@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include "parser.h"
-
-const unsigned int country_code_size 	= 2;
-const unsigned int area_code_size 	= 3;
-const unsigned int local_code_size 	= 7;
+				/* example: +90 525 3372557 */
+const unsigned int country_code_size 	= 2; /* +90 */
+const unsigned int area_code_size 	= 3; /* 525 */
+const unsigned int local_code_size 	= 7; /* 3372567 */
 
 int main(void)
 {
